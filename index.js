@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { MongoClient } from "mongodb";
+import transaction from "./src/routes.js";
+import sing from "./src/routes.js";
 
 dotenv.config();
 const app=express();
@@ -9,11 +10,7 @@ const app=express();
 app.use(cors());
 app.use(express.json());
 
-//conexão mongo
-const mongoClient = new MongoClient(process.env.DATABASE_URL);
-let db;
-mongoClient.connect().then(()=>{
-    db=mongoClient.db();
-});
+app.use(sing);
+app.use(transaction);
 
 app.listen(5000, ()=>console.log("Running"));
