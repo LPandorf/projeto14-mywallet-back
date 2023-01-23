@@ -5,7 +5,8 @@ async function insert(req, res){
     console.log("12");
     const {description, value, type}=req.body;
     console.log("15");
-    const {session, user}=req.locals;
+    console.log(res.locals);
+    const {session, user}=res.locals;
 
     try{
         console.log("13");
