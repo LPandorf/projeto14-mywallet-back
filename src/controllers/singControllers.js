@@ -25,6 +25,7 @@ async function singUp(req, res) {
 };
 
 async function singIn(req,res){
+    console.log("inicio")
     const {email,password} = req.body;
 
     const isValid=singInFormat.validate({email,password});
@@ -43,10 +44,19 @@ async function singIn(req,res){
             return res.sendStatus(StatusCode.UNAUTHORIZED);
         }
         console.log("2");
-        const token=uuid();
+        
         console.log("2");
-        mongo.collection(Collections.SESSIONS).insertOne({userId: user._id,token});
-        return res.sendStatus(token);
+        const Token=await mongo.collection(Collections.SESSIONS).findOne({userId: user._id});
+        if(!Token){
+            const token=uuid();
+            console.log("ta aqui");
+            mongo.collection(Collections.SESSIONS).insertOne({userId: user._id,token});
+        }
+        
+        console.log("3");
+        console.log(Token);/* 
+        console.log(token); */
+        return res.status(200).send(Token);
     }catch(error){
         console.log(error);
         return res.sendStatus(StatusCode.SERVER_ERROR);
